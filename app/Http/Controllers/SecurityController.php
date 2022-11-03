@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\UserRepository;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
@@ -12,7 +13,19 @@ use Illuminate\Support\Facades\Auth;
 
 class SecurityController extends Controller
 {
-    //
+
+    /**
+     * @var UserRepository
+     */
+    private $userRepository;
+
+    /**
+     * @param UserRepository $userRepository
+     */
+    public function __construct(UserRepository $userRepository)
+    {
+        $this->userRepository = $userRepository;
+    }
 
     /**
      * @param Request $request
@@ -28,16 +41,7 @@ class SecurityController extends Controller
      * \     */
     public function login(Request $request)
     {
-
-        $fieldType = filter_var($request->username, FILTER_VALIDATE_EMAIL) ? 'email' : 'username';
-        if(auth()->attempt(array($fieldType => $request->username, 'password' => $request->password)))
-        {
-            $user = Auth::user();
-            return 'Congrats! You are logged in as: ' . $user->username .
-                "<a href=" .  route('logout') . ">Logout</a>";
-        }
-
-        return redirect()->route('page.landing-page')->with('errorMessage','The credentials are incorrect.');
+       return $this->userRepository->processLogin($request);
     }
 
     /**
@@ -46,7 +50,6 @@ class SecurityController extends Controller
      */
     public function logout(Request $request)
     {
-        \Auth::logout();
-        return response()->view('index');
+      return $this->userRepository->logout();
     }
 }
