@@ -8,7 +8,10 @@ use PHPUnit\Framework\TestCase;
 class SuccessControllerTest extends TestCase
 {
 
-    public function testDashboard()
+    /**
+     * @return void
+     */
+    public function dashboard()
     {
 
     }
