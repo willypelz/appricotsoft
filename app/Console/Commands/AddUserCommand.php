@@ -11,8 +11,6 @@ use Illuminate\Validation\Rules\Password;
 class AddUserCommand extends Command
 {
 
-//php artisan user:create -u myusername -e michael@gmail.com
-
     /**
      * The name and signature of the console command.
      *
